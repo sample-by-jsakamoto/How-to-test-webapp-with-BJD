@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net.Configuration;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using SampleWebApp.Models;
@@ -25,6 +28,16 @@ namespace SampleWebApp.Controllers
         public ActionResult Index(AttendeeRegistration registration)
         {
             var id = this.Repository.Regist(registration);
+
+            var smtpConfig = ConfigurationManager.GetSection("system.net/mailSettings/smtp") as SmtpSection;
+            var smtpClinet = new SmtpClient();
+            smtpClinet.Send(
+                from: smtpConfig.From,
+                recipients: registration.Email,
+                subject: "Registration Comfirmation",
+                body: "Hi " + registration.Name + ",\r\n Thank you for your attend!"
+                );
+
             return RedirectToAction("Complete", new { registration.Id });
         }
 

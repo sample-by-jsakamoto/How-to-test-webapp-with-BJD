@@ -1,10 +1,19 @@
 ﻿Feature: SpecFlowFeature1
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
+	regist and receive confirmation mail.
 
-Scenario: Add two numbers
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+Scenario: Attendee Registraton
+	Given There is no mails received
+	When Open URL http://localhost:49469/
+	And Enter text "bar" into #Name
+	And Enter text "bar@example.com" into #Email
+	And Click #Regist
+	Then The text "Complete" is present at #Caption
+	And One mail received as bellow
+	| field   | value                     |
+	| from    | foo@example.com           |
+	| to      | bar@example.com           |
+	| subject | Registration Comfirmation |
+	"""
+	Hi bar,
+	Thank you for your attend!
+	"""
