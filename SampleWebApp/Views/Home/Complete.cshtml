@@ -1,0 +1,33 @@
+﻿@model SampleWebApp.Models.AttendeeRegistration
+
+@{
+    ViewBag.Title = "Complete";
+}
+
+<h2>Complete</h2>
+
+<div>
+    <h4>AttendeeRegistration</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
