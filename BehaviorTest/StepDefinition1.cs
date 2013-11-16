@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Remote;
-using TechTalk.SpecFlow;
+using TechTalk.SpecFlow;s
 
 namespace BehaviorTest
 {
@@ -20,14 +19,7 @@ namespace BehaviorTest
         public void GivenThereIsNoMailsReceived()
         {
             var url = _BJDWebAPIEndPoint + "message";
-            try
-            {
-                new WebClient().UploadData(url, "DELETE", new byte[0]);
-            }
-            catch (WebException e)
-            {
-                if (e.Message.StartsWith("The server committed a protocol violation.") == false) throw;
-            }
+            new WebClient().UploadData(url, "DELETE", new byte[0]);
         }
 
         [When("Open URL (.+)")]
@@ -56,7 +48,7 @@ namespace BehaviorTest
         public void TheTextIsPresentAt(string text, string id)
         {
             var element = this.WebDriver.FindElementById(id.TrimStart('#'));
-            Assert.AreEqual(text, element.Text);
+            element.Text.Is(text);
         }
 
         public class MailMsg
@@ -64,9 +56,9 @@ namespace BehaviorTest
             public string From { get; set; }
 
             public string To { get; set; }
-            
+
             public string Subject { get; set; }
-            
+
             public string Body { get; set; }
         }
 
@@ -78,17 +70,24 @@ namespace BehaviorTest
         [Then("One mail received as bellow")]
         public void OneMailReceivedAsBellow(string body, Table expected)
         {
-            var url = _BJDWebAPIEndPoint + "message";
-            var jsonString = default(string);
-            try
-            {
-                jsonString = new WebClient().DownloadString(url);
-            }
-            catch (WebException e)
-            {
-                if (e.Message.StartsWith("The server committed a protocol violation.") == false) throw;
-            }
-            //ToDo: var apiMsgPack = Newtonsoft.Json.JsonConvert.DeserializeObject<ApiMsgPack>(jsonString);
+            var url = _BJDWebAPIEndPoint + "message?fields=from,to,subject,body";
+            var jsonString = new WebClient().DownloadString(url);
+            var apiMsgPack = JsonConvert.DeserializeObject<ApiMsgPack>(jsonString);
+
+            var expectedFields = expected.Rows.ToDictionary(r => r[0], r => r[1]);
+
+            // Only one mail received.
+            apiMsgPack.IsNotNull();
+            apiMsgPack.Data.Count().Is(1);
+
+            // Assert content of the received mail.
+            var msg = apiMsgPack.Data.First();
+            msg.From.Is(expectedFields["from"]);
+            msg.To.Is(expectedFields["to"]);
+            msg.Subject.Is(expectedFields["subject"]);
+
+            msg.Body.Replace("=0D", "\r").Replace("=0A", "\n").TrimEnd('\r', '\n')
+                .Is(body.TrimEnd('\r', '\n'));
         }
 
         public RemoteWebDriver WebDriver

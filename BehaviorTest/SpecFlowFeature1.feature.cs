@@ -78,15 +78,15 @@ namespace BehaviorTest
 this.ScenarioSetup(scenarioInfo);
 #line 5
  testRunner.Given("There is no mails received", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 6
- testRunner.When("Open URL http://localhost:49469/", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 7
- testRunner.And("Enter text \"bar\" into #Name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("Open URL http://localhost:49469/", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
- testRunner.And("Enter text \"bar@example.com\" into #Email", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Enter text \"bar\" into #Name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 9
- testRunner.And("Click #Regist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Enter text \"bar@example.com\" into #Email", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
+ testRunner.And("Click #Regist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 12
  testRunner.Then("The text \"Complete\" is present at #Caption", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
@@ -101,7 +101,7 @@ this.ScenarioSetup(scenarioInfo);
             table1.AddRow(new string[] {
                         "subject",
                         "Registration Comfirmation"});
-#line 11
+#line 13
  testRunner.And("One mail received as bellow", "Hi bar,\r\nThank you for your attend!", table1, "And ");
 #line hidden
             this.ScenarioCleanup();

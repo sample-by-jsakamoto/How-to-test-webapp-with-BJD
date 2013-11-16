@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net.Configuration;
 using System.Net.Mail;
-using System.Web;
 using System.Web.Mvc;
 using SampleWebApp.Models;
 
@@ -35,7 +32,7 @@ namespace SampleWebApp.Controllers
                 from: smtpConfig.From,
                 recipients: registration.Email,
                 subject: "Registration Comfirmation",
-                body: "Hi " + registration.Name + ",\r\n Thank you for your attend!"
+                body: "Hi " + registration.Name + ",\r\nThank you for your attend!"
                 );
 
             return RedirectToAction("Complete", new { registration.Id });
